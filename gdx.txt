@@ -398,3 +398,7 @@ Mon Feb 29 11:17:21 2016	Price: 19.11
 Mon Feb 29 11:17:27 2016	Price: 19.115
 Mon Feb 29 11:17:33 2016	Price: 19.115
 Mon Feb 29 11:17:39 2016	Price: 19.12
+Mon Feb 29 11:17:46 2016	Price: 19.12
+Mon Feb 29 11:17:52 2016	Price: 19.119
+Mon Feb 29 11:17:58 2016	Price: 19.11
+Mon Feb 29 11:18:04 2016	Price: 19.11
