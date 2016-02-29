@@ -15,7 +15,7 @@ notif_period = int(raw_input("emails every (n) minutes. enter n: "))
 # get bollinger band thresholds
 try:
     bburl = urllib.urlopen("http://www.bollingeronbollingerbands.com/common/getjson.php?"
-                            "xml=price&i=price&l1=0&ct=0&ov=0-20-2-0-0-0-0-0-0-0-0&pc=0&pp=&m=&s=GDX&w=800&t=0&g=5&q=60")
+                           "xml=price&i=price&l1=0&ct=0&ov=0-20-2-0-0-0-0-0-0-0-0&pc=0&pp=&m=&s=GDX&w=800&t=0&g=5&q=60")
     bbdata = bburl.read()
     bbdata = bbdata[bbdata.rfind('"date":'):] # extract today's bb data
     regex_low = '"bb_lower1":([0-9.]+)'
@@ -35,7 +35,7 @@ def email_user(msg):
     #build email content
     header = "From: %s\r\n" % ("Ronny's Stock Update")
     header += "To: %s\r\n" % (rcver)
-    header += "Subject: Google Stock Price Update\r\n\r\n"
+    header += "Subject: GDX Stock Price Update\r\n\r\n"
     msg = header + msg
     try:
         mail = smtplib.SMTP('smtp.gmail.com', 587)
@@ -54,22 +54,22 @@ try:
     while True:
         
         # open log
-        pricelog = open("goog.txt", "a")
+        pricelog = open("gdx.txt", "a")
         
         # get raw data & parse price
-        stockurl = urllib.urlopen('http://download.finance.yahoo.com/d/quotes.csv?s=goog&f=l1')
+        stockurl = urllib.urlopen('http://download.finance.yahoo.com/d/quotes.csv?s=gdx&f=l1')
         price = stockurl.read().rstrip()
         
         # send email?
         if txtclock <= 0 and bb_low > float(price):
             #email
-            print("Google is getting cheap!\t" + "price: " + price)
-            email_user("Google is getting cheap!\n\nprice: " + price)
+            print("Gold is getting cheap!\t" + "price: " + price)
+            email_user("Gold is getting cheap!\n\nprice: " + price)
             txtclock = notif_period * 10
         elif txtclock <= 0 and bb_high < float(price):
             #email
-            print("Google is getting expensive!\t" + "price: " + price)
-            email_user("Google is getting expensive!\n\nprice: " + price)
+            print("Gold is getting expensive!\t" + "price: " + price)
+            email_user("Gold is getting expensive!\n\nprice: " + price)
             txtclock = notif_period * 10
         
         # log & delay
