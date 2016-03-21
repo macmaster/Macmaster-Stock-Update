@@ -1,7 +1,7 @@
 import time
 import urllib
-import re
 import smtplib
+import json
 
 # poll goog every 6 secs and make a feed
 # email user at certain threshold
@@ -14,18 +14,19 @@ notif_period = int(raw_input("emails every (n) minutes. enter n: "))
 
 # get bollinger band thresholds
 try:
+    # json data
     bburl = urllib.urlopen("http://www.bollingeronbollingerbands.com/common/getjson.php?"
                            "xml=price&i=price&l1=0&ct=0&ov=0-20-2-0-0-0-0-0-0-0-0&pc=0&pp=&m=&s=GDX&w=800&t=0&g=5&q=60")
     bbdata = bburl.read()
-    bbdata = bbdata[bbdata.rfind('"date":'):] # extract today's bb data
-    regex_low = '"bb_lower1":([0-9.]+)'
-    regex_high = '"bb_upper1":([0-9.]+)'
+    bbdata = json.loads(bbdata)
+    sdata = bbdata.get("stockdata")
+    sdata = sdata.get("data")[-1]
     # parse bb prices
-    bb_low = float(re.findall(re.compile(regex_low), bbdata)[0])
-    bb_high = float(re.findall(re.compile(regex_high), bbdata)[0])
+    bb_low = sdata.get("bb_middle1")
+    bb_high = sdata.get("bb_upper1")
     print bb_low, bb_high
 except:
-    print "failled to get bollinger band data!"
+    print "failed to get bollinger band data!"
     exit()
 finally:
     bburl.close()
@@ -54,7 +55,7 @@ try:
     while True:
         
         # open log
-        pricelog = open("gdx.txt", "a")
+        pricelog = open("gdx.log", "a")
         
         # get raw data & parse price
         stockurl = urllib.urlopen('http://download.finance.yahoo.com/d/quotes.csv?s=gdx&f=l1')
