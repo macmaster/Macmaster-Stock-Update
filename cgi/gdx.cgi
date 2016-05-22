@@ -19,12 +19,12 @@ try:
     bburl = urllib.urlopen("http://www.bollingeronbollingerbands.com/common/getjson.php?"
                            "xml=price&i=price&l1=0&ct=0&ov=0-20-2-0-0-0-0-0-0-0-0&pc=0&pp=&m=&s=GDX&w=800&t=0&g=5&q=60")
     bbdata = bburl.read()
-    bbdata = json.loads(bbdata)
-    sdata = bbdata.get("stockdata")
-    sdata = sdata.get("data")[-1]
-    # parse bb prices
-    bb_low = sdata.get("bb_middle1")
-    bb_high = sdata.get("bb_upper1")
+	bbdata = bbdata[bbdata.rfind('"date":'):] # extract today's bb data
+	regex_low = '"bb_lower1":([0-9.]+)'
+	regex_high = '"bb_upper1":([0-9.]+)'
+	# parse bb prices
+	bb_low = float(re.findall(re.compile(regex_low), bbdata)[0])
+	bb_high = float(re.findall(re.compile(regex_high), bbdata)[0])
     print bb_low, bb_high
 except:
     print "failed to get bollinger band data!"
