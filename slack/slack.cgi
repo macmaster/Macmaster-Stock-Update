@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/python
 # slack.py
 # 
 # quick python script to send the
