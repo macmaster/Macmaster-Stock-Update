@@ -1,6 +1,10 @@
 import urllib
 
-url = raw_input("enter your url: ")
-stockdata = urllib.urlopen(url).read()
-print stockdata
+tickers = open('tickers.txt')
+for tick in tickers:
+    stockurl =
+        urllib.urlopen('http://download.finance.yahoo.com/d/quotes.csv?s='+tick+'&f=j3')
+    price = stockurl.read().rstrip()
+    print tick + "\t" + price
+
 

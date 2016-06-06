@@ -77,7 +77,7 @@ while True:
 	emailmsg = ""
 	for tick in tickers:			
 		# open log
-		pricelog = open("logs/"+tick+".log", "a")
+		#pricelog = open("logs/"+tick+".log", "a")
 
 		# get raw data & parse price
 		stockurl = urllib.urlopen('http://download.finance.yahoo.com/d/quotes.csv?s='+tick +'&f=l1')
@@ -96,8 +96,8 @@ while True:
 			notify = True
 		# log & delay
 		pricestr = time.asctime() + "\tPrice: " + price + "\n"
-		pricelog.write(pricestr)
-		pricelog.close()
+		#pricelog.write(pricestr)
+		#pricelog.close()
 
 	# maintence branches
 	if notify is True:
