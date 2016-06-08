@@ -72,44 +72,47 @@ def email_user(msg):
 txtclock = 0 # email timer
 bolclock = 0 # bollinger band timer
 set_bollinger()
+
 while True:
-	notify = False
-	emailmsg = ""
-	for tick in tickers:			
-		# open log
-		#pricelog = open("logs/"+tick+".log", "a")
+	try:
+		while True:
+			notify = False
+			emailmsg = ""
+			for tick in tickers:			
+				# open log
+				#pricelog = open("logs/"+tick+".log", "a")
+		
+				# get raw data & parse price
+				stockurl = urllib.urlopen('http://download.finance.yahoo.com/d/quotes.csv?s='+tick +'&f=l1')
+				price = stockurl.read().rstrip()
+		
+				# send email?
+				if txtclock <= 0 and bb_low[tick] > float(price):
+					#email
+					print(tick+" is getting cheap!\t" + "price: " + price)
+					emailmsg += tick+" is getting cheap!\t\tprice: " + price + "\n"
+					notify = True
+				elif txtclock <= 0 and bb_high[tick] < float(price):
+					#email
+					print(tick+" is getting expensive!\t" + "price: " + price)
+					emailmsg += tick+" is getting expensive!\t\tprice: " + price + "\n"
+					notify = True
+		
+			# maintence branches
+			if notify is True:
+				print " send emails to rcver list"
+				email_user(emailmsg)
+				txtclock = notify_period
+				emailmsg = ""
+				notfiy = False
+			if bolclock <= 0:
+				bolclock = 1440 # every 24hrs
+				set_bollinger()
+			
+			txtclock -= 1
+			bolclock -= 1
+			time.sleep(60)
 
-		# get raw data & parse price
-		stockurl = urllib.urlopen('http://download.finance.yahoo.com/d/quotes.csv?s='+tick +'&f=l1')
-		price = stockurl.read().rstrip()
-
-		# send email?
-		if txtclock <= 0 and bb_low[tick] > float(price):
-			#email
-			print(tick+" is getting cheap!\t" + "price: " + price)
-			emailmsg += tick+" is getting cheap!\t\tprice: " + price + "\n"
-			notify = True
-		elif txtclock <= 0 and bb_high[tick] < float(price):
-			#email
-			print(tick+" is getting expensive!\t" + "price: " + price)
-			emailmsg += tick+" is getting expensive!\t\tprice: " + price + "\n"
-			notify = True
-		# log & delay
-		pricestr = time.asctime() + "\tPrice: " + price + "\n"
-		#pricelog.write(pricestr)
-		#pricelog.close()
-
-	# maintence branches
-	if notify is True:
-		print " send emails to rcver list"
-		email_user(emailmsg)
-		txtclock = notify_period
-		emailmsg = ""
-		notfiy = False
-	if bolclock <= 0:
-		bolclock = 1440 # every 24hrs
-		set_bollinger()
-	
-	txtclock -= 1
-	bolclock -= 1
-	time.sleep(60)
+	except:
+		print "failed in the main loop!! "
+		print time.asctime()
