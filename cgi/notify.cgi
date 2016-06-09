@@ -9,7 +9,7 @@ import smtplib
 # email user at certain threshold
 
 # setup ticker data
-tickers = ["gdx", "goog", "aapl", "sbux", "yhoo", "ibm", "wdfc", "ha"]
+tickers = ["gdx", "goog", "aapl", "fb", "sbux", "yhoo", "ibm", "wdfc", "ha", ]
 bb_low = {}
 bb_high = {}
 
