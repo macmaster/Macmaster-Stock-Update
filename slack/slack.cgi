@@ -62,46 +62,46 @@ def set_bollinger():
         
     except:
         print "failed to get bollinger band data!"
-        sys.exit()
 
 # begin workflow
 txtclock = 0 # notify timer
 bolclock = 0 # bollinger band timer
 set_bollinger()
 while True:
-    notify = False
-    slackmsg = ""
-    tickers = open("tickers")
-    for tick in tickers:        
-        # get raw data & parse price
-        tick = tick.rstrip()
-        stockurl = urllib.urlopen('http://download.finance.yahoo.com/d/quotes.csv?s='+tick+'&f=l1')
-        price = stockurl.read().rstrip()
-        
-        # send email?
-        if txtclock <= 0 and bb_low[tick] > float(price):
-            #email
-            print(tick+" is getting cheap!\t" + "price: " + price)
-            slackmsg += time.asctime()+"\t\t*"+tick+"* is getting cheap!\t\tprice: `"+price+"`\n"
-            notify = True
-        elif txtclock <= 0 and bb_high[tick] < float(price):
-            #email
-            print(tick+" is getting expensive!\t" + "price: " + price)
-            slackmsg += time.asctime()+"\t\t*"+tick+"* is getting expensive!\t\tprice: `"+price+"`\n"
-            notify = True
+	notify = False
+	slackmsg = ""
+	tickers = open("tickers")
+	for tick in tickers:        
+	  # get raw data & parse price
+	  tick = tick.rstrip()
+	  stockurl = urllib.urlopen('http://download.finance.yahoo.com/d/quotes.csv?s='+tick+'&f=l1')
+	  price = stockurl.read().rstrip()
+	  
+	  # send email?
+	  if txtclock <= 0 and bb_low[tick] > float(price):
+			#email
+			print(tick+" is getting cheap!\t" + "price: " + price)
+			slackmsg += time.asctime()+"\t\t*"+tick+"* is getting cheap!\t\tprice: `"+price+"`\n"
+			notify = True
+	  elif txtclock <= 0 and bb_high[tick] < float(price):
+			#email
+			print(tick+" is getting expensive!\t" + "price: " + price)
+			slackmsg += time.asctime()+"\t\t*"+tick+"* is getting expensive!\t\tprice: `"+price+"`\n"
+			notify = True
 
-    # maintence branches
-    if notify is True:
-            print " send notfications to slack channel"
-            notify_slack(slackmsg)
-            txtclock = notify_period
-            slackmsg = ""
-            notfiy = False
-    if bolclock <= 0:
-            bolclock = 1440 # every 24hrs
-            set_bollinger()
+	# maintence branches
+	if notify is True:
+			print " send notfications to slack channel"
+			notify_slack(slackmsg)
+			txtclock = notify_period
+			slackmsg = ""
+			notfiy = False
+	if bolclock <= 0:
+			bolclock = 1440 # every 24hrs
+			set_bollinger()
 
-    # update CLK
-    txtclock -= 1
-    bolclock -= 1
-    time.sleep(60)
+	# update CLK
+	txtclock -= 1
+	bolclock -= 1
+	time.sleep(60)
+	print time.asctime()
