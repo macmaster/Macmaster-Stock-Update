@@ -9,7 +9,7 @@ As of today:
 
 In the future:
    1) can send sms text messages   
-   2) works for many different stocks   
+	2) only spams at the market open and close.
    3) runs on a server 24/7 (possible Amazon Web Services?)   
 
 Email notifications for stock prices like google
